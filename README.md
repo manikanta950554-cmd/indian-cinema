@@ -1,6 +1,6 @@
 # Indian Cinema
 
-A warm, cinematic professional network for the Indian film industry. Built as a React + Vite frontend with an Express + JWT API and MongoDB-ready Mongoose models.
+Indian Cinema is a warm, cinematic professional network for the Indian film industry.
 
 ## Run locally
 
@@ -10,18 +10,18 @@ cp .env.example .env
 npm run dev
 ```
 
-- Frontend: http://localhost:5173
-- API: http://localhost:4000/api/health
+Open `http://localhost:5173`. The API runs at `http://localhost:4000`.
 
-The frontend includes a polished demo mode so the cinematic experience works immediately. The API is ready for signup/login, profiles, posts, comments, likes, search, and connection requests once MongoDB is available.
+## Included
 
-## Product flow
+- React + Vite frontend with responsive crimson / marquee-amber visual system
+- JWT signup and login with bcrypt password hashing
+- MongoDB-ready Mongoose models for users, posts, connections, and notifications
+- Profile editing with bio and credits-ready schema
+- Feed creation, region filters, likes, comments API, and search
+- Connection requests with accept/reject API and notification records
+- Demo fallback: the UI remains explorable when MongoDB is not configured
 
-1. Warm onboarding: choose a region, role, and name.
-2. Studio dashboard: personalized greeting, composer, feed, appreciation actions, and daily creative streak.
-3. Network: find collaborators by name, role, or region and send connection invitations.
-4. Profile: credits-ready artist profile with achievement badges.
+## Persistence
 
-## Backend
-
-Set `MONGODB_URI` in `.env` to a MongoDB database. JWT and bcrypt authentication are implemented in `server/index.js`; schemas live in `server/models.js`. In production, use a strong `JWT_SECRET`, validate uploads, add rate limiting, and serve the built client behind the API.
+Copy `.env.example` to `.env`, set `MONGODB_URI` to a MongoDB database, and replace `JWT_SECRET` with a long random secret. The frontend uses `VITE_API_URL` to locate the API.

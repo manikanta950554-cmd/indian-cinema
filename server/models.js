@@ -1,8 +1,12 @@
 import mongoose from 'mongoose'
-
-const userSchema = new mongoose.Schema({ name: { type: String, required: true }, email: { type: String, required: true, unique: true }, passwordHash: String, role: String, region: String, bio: String, photo: String, credits: [{ title: String, year: String, type: String }], badges: [String] }, { timestamps: true })
-const postSchema = new mongoose.Schema({ userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, content: String, image: String, likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], comments: [{ userId: mongoose.Schema.Types.ObjectId, text: String, createdAt: { type: Date, default: Date.now } }] }, { timestamps: true })
-const connectionSchema = new mongoose.Schema({ requesterId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' } }, { timestamps: true })
+const creditSchema = new mongoose.Schema({ title: String, year: String, type: String }, { _id: false })
+const userSchema = new mongoose.Schema({ name: { type: String, required: true }, email: { type: String, required: true, unique: true, lowercase: true }, passwordHash: { type: String, required: true }, role: { type: String, required: true }, region: { type: String, required: true }, bio: { type: String, default: '' }, photo: String, credits: [creditSchema], badges: [String] }, { timestamps: true })
+const commentSchema = new mongoose.Schema({ userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, text: String, createdAt: { type: Date, default: Date.now } }, { _id: true })
+const postSchema = new mongoose.Schema({ userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, content: { type: String, required: true }, image: String, region: String, role: String, likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], comments: [commentSchema] }, { timestamps: true })
+const connectionSchema = new mongoose.Schema({ requesterId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, status: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' } }, { timestamps: true })
+connectionSchema.index({ requesterId: 1, receiverId: 1 }, { unique: true })
+const notificationSchema = new mongoose.Schema({ recipientId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, actorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, type: String, text: String, entityId: mongoose.Schema.Types.ObjectId, read: { type: Boolean, default: false } }, { timestamps: true })
 export const User = mongoose.model('User', userSchema)
 export const Post = mongoose.model('Post', postSchema)
 export const Connection = mongoose.model('Connection', connectionSchema)
+export const Notification = mongoose.model('Notification', notificationSchema)
